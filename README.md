@@ -6,12 +6,16 @@ Example usage:
 ```
 TinyDB tinydb = new TinyDB(context);
 
-tinydb.putInt("clickCount", 2);
-tinydb.putFloat("xPoint", 3.6f);
-tinydb.putLong("userCount", 39832L);
-
-tinydb.putString("userName", "john");
-tinydb.putBoolean("isUserMale", true); 
+//int
+tinydb.put("clickCount", 2);
+//float
+tinydb.put("xPoint", 3.6f);
+//long
+tinydb.put("userCount", 39832L);
+// string
+tinydb.put("userName", "john");
+// bolean
+tinydb.put("isUserMale", true); 
 
 tinydb.putList("MyUsers", mUsersArray);
 tinydb.putImagePNG("DropBox/WorkImages", "MeAtlunch.png", lunchBitmap);
