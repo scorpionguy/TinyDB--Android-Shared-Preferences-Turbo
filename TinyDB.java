@@ -15,11 +15,11 @@
  */
 
 /*
- *  The "‚‗‚" character is not a comma, it is the SINGLE LOW-9 QUOTATION MARK unicode 201A
+ *  The "‚?‚" character is not a comma, it is the SINGLE LOW-9 QUOTATION MARK unicode 201A
  *  and unicode 2017 that are used for separating the items in a list.
  */
 
-package com.example.myappname;
+package com.sami;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,17 +28,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-
+@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public class TinyDB {
 
     private SharedPreferences preferences;
@@ -49,9 +51,9 @@ public class TinyDB {
         preferences = PreferenceManager.getDefaultSharedPreferences(appContext);
     }
 
-
     /**
      * Decodes the Bitmap from 'path' and returns it
+     * 
      * @param path image path
      * @return the Bitmap from 'path'
      */
@@ -68,18 +70,18 @@ public class TinyDB {
         return bitmapFromPath;
     }
 
-
     /**
      * Returns the String path of the last saved image
+     * 
      * @return string path of the last saved image
      */
     public String getSavedImagePath() {
         return lastImagePath;
     }
 
-
     /**
      * Saves 'theBitmap' into folder 'theFolder' with the name 'theImageName'
+     * 
      * @param theFolder the folder path dir you want to save it to e.g "DropBox/WorkImages"
      * @param theImageName the name you want to assign to the image file e.g "MeAtLunch.png"
      * @param theBitmap the image you want to save as a Bitmap
@@ -100,9 +102,9 @@ public class TinyDB {
         return false;
     }
 
-
     /**
      * Saves 'theBitmap' into 'fullPath'
+     * 
      * @param fullPath full path of the image file e.g. "Images/MeAtLunch.png"
      * @param theBitmap the image you want to save as a Bitmap
      * @return true if image was saved, false otherwise
@@ -113,11 +115,13 @@ public class TinyDB {
 
     /**
      * Creates the path for the image with name 'imageName' in DEFAULT_APP.. directory
+     * 
      * @param imageName name of the image
      * @return the full path of the image. If it failed to create directory, return empty string
      */
     private String setupFullPath(String imageName) {
-        File mFolder = new File(Environment.getExternalStorageDirectory(), DEFAULT_APP_IMAGEDATA_DIRECTORY);
+        File mFolder = new File(Environment.getExternalStorageDirectory(),
+                DEFAULT_APP_IMAGEDATA_DIRECTORY);
 
         if (isExternalStorageReadable() && isExternalStorageWritable() && !mFolder.exists()) {
             if (!mFolder.mkdirs()) {
@@ -131,6 +135,7 @@ public class TinyDB {
 
     /**
      * Saves the Bitmap as a PNG file at path 'fullPath'
+     * 
      * @param fullPath path of the image file
      * @param bitmap the image as a Bitmap
      * @return true if it successfully saved, false otherwise
@@ -186,21 +191,23 @@ public class TinyDB {
 
     /**
      * Get int value from SharedPreferences at 'key'. If key not found, return 'defaultValue'
+     * 
      * @param key SharedPreferences key
      * @param defaultValue int value returned if key was not found
      * @return int value at 'key' or 'defaultValue' if key not found
      */
-    public int getInt(String key, int defaultValue) {
+    public int get(String key, int defaultValue) {
         return preferences.getInt(key, defaultValue);
     }
 
     /**
      * Get parsed ArrayList of Integers from SharedPreferences at 'key'
+     * 
      * @param key SharedPreferences key
      * @return ArrayList of Integers
      */
     public ArrayList<Integer> getListInt(String key) {
-        String[] myList = TextUtils.split(preferences.getString(key, ""), "‚‗‚");
+        String[] myList = TextUtils.split(preferences.getString(key, ""), "‚?‚");
         ArrayList<String> arrayToList = new ArrayList<String>(Arrays.asList(myList));
         ArrayList<Integer> newList = new ArrayList<Integer>();
 
@@ -212,32 +219,35 @@ public class TinyDB {
 
     /**
      * Get long value from SharedPreferences at 'key'. If key not found, return 'defaultValue'
+     * 
      * @param key SharedPreferences key
      * @param defaultValue long value returned if key was not found
      * @return long value at 'key' or 'defaultValue' if key not found
      */
-    public long getLong(String key, long defaultValue) {
+    public long get(String key, long defaultValue) {
         return preferences.getLong(key, defaultValue);
     }
 
     /**
      * Get float value from SharedPreferences at 'key'. If key not found, return 'defaultValue'
+     * 
      * @param key SharedPreferences key
      * @param defaultValue float value returned if key was not found
      * @return float value at 'key' or 'defaultValue' if key not found
      */
-    public float getFloat(String key, float defaultValue) {
+    public float get(String key, float defaultValue) {
         return preferences.getFloat(key, defaultValue);
     }
 
     /**
      * Get double value from SharedPreferences at 'key'. If exception thrown, return 'defaultValue'
+     * 
      * @param key SharedPreferences key
      * @param defaultValue double value returned if exception is thrown
      * @return double value at 'key' or 'defaultValue' if exception is thrown
      */
-    public double getDouble(String key, double defaultValue) {
-        String number = getString(key);
+    public double get(String key, double defaultValue) {
+        String number = get(key);
 
         try {
             return Double.parseDouble(number);
@@ -249,6 +259,7 @@ public class TinyDB {
 
     /**
      * Get parsed ArrayList of Double from SharedPreferences at 'key'
+     * 
      * @param key SharedPreferences key
      * @return ArrayList of Double
      */
@@ -265,34 +276,39 @@ public class TinyDB {
 
     /**
      * Get String value from SharedPreferences at 'key'. If key not found, return ""
+     * 
      * @param key SharedPreferences key
      * @return String value at 'key' or "" (empty String) if key not found
      */
-    public String getString(String key) {
+    public String get(String key) {
         return preferences.getString(key, "");
     }
 
     /**
      * Get parsed ArrayList of String from SharedPreferences at 'key'
+     * 
      * @param key SharedPreferences key
      * @return ArrayList of String
      */
     public ArrayList<String> getListString(String key) {
-        return new ArrayList<String>(Arrays.asList(TextUtils.split(preferences.getString(key, ""), "‚‗‚")));
+        return new ArrayList<String>(Arrays.asList(TextUtils.split(preferences.getString(key, ""),
+                "‚?‚")));
     }
 
     /**
      * Get boolean value from SharedPreferences at 'key'. If key not found, return 'defaultValue'
+     * 
      * @param key SharedPreferences key
      * @param defaultValue boolean value returned if key was not found
      * @return boolean value at 'key' or 'defaultValue' if key not found
      */
-    public boolean getBoolean(String key, boolean defaultValue) {
+    public boolean get(String key, boolean defaultValue) {
         return preferences.getBoolean(key, defaultValue);
     }
 
     /**
      * Get parsed ArrayList of Boolean from SharedPreferences at 'key'
+     * 
      * @param key SharedPreferences key
      * @return ArrayList of Boolean
      */
@@ -315,52 +331,58 @@ public class TinyDB {
 
     /**
      * Put int value into SharedPreferences with 'key' and save
+     * 
      * @param key SharedPreferences key
      * @param value int value to be added
      */
-    public void putInt(String key, int value) {
+    public void put(String key, int value) {
         preferences.edit().putInt(key, value).apply();
     }
 
     /**
      * Put ArrayList of Integer into SharedPreferences with 'key' and save
+     * 
      * @param key SharedPreferences key
      * @param intList ArrayList of Integer to be added
      */
     public void putListInt(String key, ArrayList<Integer> intList) {
         Integer[] myIntList = intList.toArray(new Integer[intList.size()]);
-        preferences.edit().putString(key, TextUtils.join("‚‗‚", myIntList)).apply();
+        preferences.edit().putString(key, TextUtils.join("‚?‚", myIntList)).apply();
     }
 
     /**
      * Put long value into SharedPreferences with 'key' and save
+     * 
      * @param key SharedPreferences key
      * @param value long value to be added
      */
-    public void putLong(String key, long value) {
+    public void put(String key, long value) {
         preferences.edit().putLong(key, value).apply();
     }
 
     /**
      * Put float value into SharedPreferences with 'key' and save
+     * 
      * @param key SharedPreferences key
      * @param value float value to be added
      */
-    public void putFloat(String key, float value) {
+    public void put(String key, float value) {
         preferences.edit().putFloat(key, value).apply();
     }
 
     /**
      * Put double value into SharedPreferences with 'key' and save
+     * 
      * @param key SharedPreferences key
      * @param value double value to be added
      */
-    public void putDouble(String key, double value) {
-        putString(key, String.valueOf(value));
+    public void put(String key, double value) {
+        put(key, String.valueOf(value));
     }
 
     /**
      * Put ArrayList of Double into SharedPreferences with 'key' and save
+     * 
      * @param key SharedPreferences key
      * @param doubleList ArrayList of Double to be added
      */
@@ -371,38 +393,42 @@ public class TinyDB {
 
     /**
      * Put String value into SharedPreferences with 'key' and save
+     * 
      * @param key SharedPreferences key
      * @param value String value to be added
      */
-    public void putString(String key, String value) {
+    public void put(String key, String value) {
         preferences.edit().putString(key, value).apply();
     }
 
     /**
      * Put ArrayList of String into SharedPreferences with 'key' and save
+     * 
      * @param key SharedPreferences key
      * @param stringList ArrayList of String to be added
      */
     public void putListString(String key, ArrayList<String> stringList) {
         String[] myStringList = stringList.toArray(new String[stringList.size()]);
-        preferences.edit().putString(key, TextUtils.join("‚‗‚", myStringList)).apply();
+        preferences.edit().putString(key, TextUtils.join("‚?‚", myStringList)).apply();
     }
 
     /**
      * Put boolean value into SharedPreferences with 'key' and save
+     * 
      * @param key SharedPreferences key
      * @param value boolean value to be added
      */
-    public void putBoolean(String key, boolean value) {
+    public void put(String key, boolean value) {
         preferences.edit().putBoolean(key, value).apply();
     }
 
     /**
      * Put ArrayList of Boolean into SharedPreferences with 'key' and save
+     * 
      * @param key SharedPreferences key
      * @param boolList ArrayList of Boolean to be added
      */
-    public void putListBoolean(String key, ArrayList<Boolean> boolList) {
+    public void put(String key, ArrayList<Boolean> boolList) {
         ArrayList<String> newList = new ArrayList<String>();
 
         for (Boolean item : boolList) {
@@ -416,9 +442,9 @@ public class TinyDB {
         putListString(key, newList);
     }
 
-
     /**
      * Remove SharedPreferences item with 'key'
+     * 
      * @param key SharedPreferences key
      */
     public void remove(String key) {
@@ -427,13 +453,13 @@ public class TinyDB {
 
     /**
      * Delete image file at 'path'
+     * 
      * @param path path of image file
      * @return true if it successfully deleted, false otherwise
      */
     public boolean deleteImage(String path) {
         return new File(path).delete();
     }
-
 
     /**
      * Clear SharedPreferences (remove everything)
@@ -444,15 +470,16 @@ public class TinyDB {
 
     /**
      * Retrieve all values from SharedPreferences. Do not modify collection return by method
+     * 
      * @return a Map representing a list of key/value pairs from SharedPreferences
      */
     public Map<String, ?> getAll() {
         return preferences.getAll();
     }
 
-
     /**
      * Register SharedPreferences change listener
+     * 
      * @param listener listener object of OnSharedPreferenceChangeListener
      */
     public void registerOnSharedPreferenceChangeListener(
@@ -463,6 +490,7 @@ public class TinyDB {
 
     /**
      * Unregister SharedPreferences change listener
+     * 
      * @param listener listener object of OnSharedPreferenceChangeListener to be unregistered
      */
     public void unregisterOnSharedPreferenceChangeListener(
@@ -471,9 +499,9 @@ public class TinyDB {
         preferences.unregisterOnSharedPreferenceChangeListener(listener);
     }
 
-
     /**
      * Check if external storage is writable or not
+     * 
      * @return true if writable, false otherwise
      */
     public static boolean isExternalStorageWritable() {
@@ -482,6 +510,7 @@ public class TinyDB {
 
     /**
      * Check if external storage is readable or not
+     * 
      * @return true if readable, false otherwise
      */
     public static boolean isExternalStorageReadable() {
